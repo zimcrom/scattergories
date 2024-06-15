@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import { useState, useEffect, useRef } from "react";
 
@@ -8,7 +8,7 @@ export default function Home() {
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [inputMinutes, setInputMinutes] = useState(1); // Default input time in minutes
   const letters = "abcdefghijklmnopqrstuvwxyz";
-  const audioRef = useRef(null); // Reference to the audio element
+  const audioRef = useRef<HTMLAudioElement>(null); // Explicitly typed useRef for audio element
 
   function getLetter() {
     return letters[Math.floor(Math.random() * 26)];
@@ -18,12 +18,12 @@ export default function Home() {
     setRandomLetter(getLetter());
   }
 
-  function handleInputChange(event) {
-    setInputMinutes(event.target.value);
+  function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setInputMinutes(parseInt(event.target.value, 10));
   }
 
   function startTimer() {
-    const parsedMinutes = parseInt(inputMinutes, 10);
+    const parsedMinutes = parseInt(inputMinutes.toString(), 10);
     if (!isNaN(parsedMinutes) && parsedMinutes > 0) {
       setIsTimerRunning(true);
       setTime(parsedMinutes * 60); // Convert minutes to seconds
@@ -33,7 +33,7 @@ export default function Home() {
   }
 
   useEffect(() => {
-    let timer;
+    let timer: NodeJS.Timeout;
     if (isTimerRunning && time > 0) {
       timer = setInterval(() => {
         setTime((prevTime) => prevTime - 1);
@@ -47,7 +47,7 @@ export default function Home() {
     return () => clearInterval(timer);
   }, [isTimerRunning, time]);
 
-  const formatTime = (time) => {
+  const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
@@ -87,3 +87,4 @@ export default function Home() {
     </main>
   );
 }
+
